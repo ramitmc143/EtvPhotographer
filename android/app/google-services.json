@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "814673463720",
+    "project_id": "hrms-d32d7",
+    "storage_bucket": "hrms-d32d7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814673463720:android:e24306e15aeb38a484759d",
+        "android_client_info": {
+          "package_name": "com.etvattendanceapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRQOCvHa3nIXDIXXmkfxZpkRFmtR-ZXH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
