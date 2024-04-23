@@ -1,9 +1,9 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-
-const handleEmployeeApi = async () => {
+//http://172.17.15.218/etvtracker/Api/punch_uesrs_data
+const handleEmployeeApi = async (userName) => {
  try {
-    const responseData = await fetch('http://172.17.15.218/etvtracker/Api/punch_uesrs_data')
+    const responseData = await fetch(`http://172.17.15.218/etvtracker/Api/username_wise_data?user_name=${userName}`)
 
     if (!responseData.ok) {
         throw new Error('Network response was not ok');

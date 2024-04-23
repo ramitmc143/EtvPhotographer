@@ -1,10 +1,10 @@
-import { View, Text } from 'react-native'
+import { View, Text, Alert } from 'react-native'
 import React from 'react';
 import punchData from '../punchData/punchData';
 
-const handlePunchApi = async (userLoginResponse ,imageUri) => {
+const handlePunchApi = async (userLoginResponse ,dataUri ) => {
 
-   const storedPunchData = await punchData(userLoginResponse,imageUri);
+   const storedPunchData = await punchData(userLoginResponse,dataUri);
    console.log('storedPunchData:-',storedPunchData)
    
      
@@ -21,6 +21,7 @@ const handlePunchApi = async (userLoginResponse ,imageUri) => {
 
     if (!response.ok) {
         console.log("Network response was not ok")
+        return;
     }
     console.log('Punch data sent successfully :');
     return true

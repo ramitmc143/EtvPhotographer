@@ -3,7 +3,7 @@ import React from 'react'
 import deviceDetails from '../deviceDetails/DeviceDetails';
 import recordPunch from '../recordPunch/recordPunchTime';
 
-const punchData = async (userLoginResponse ,imageUri) => {
+const punchData = async (userLoginResponse ,dataUri ) => {
     const deviceData  = await deviceDetails();
     const deviceId = deviceData.device_id;
     const deviceType = deviceData.device_type;
@@ -24,9 +24,8 @@ const punchData = async (userLoginResponse ,imageUri) => {
         punch_in:punchTime,
         user_name:userName,
         phone_no : Phone,
-        lattitude_longitude: `${latitude} , ${longitude}`
-        // longitude:longitude,
-        // image:imageUri
+        lattitude_longitude: `${latitude} , ${longitude}`,
+        image_url:dataUri,
     }
   return punchData;
 }

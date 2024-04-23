@@ -12,6 +12,15 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
 
+//import com.facebook.react.modules.network.NetworkingModule;
+//import com.facebook.react.modules.network.OkHttpClientProvider;
+//import com.facebook.react.modules.network.ReactCookieJarContainer;
+//import com.facebook.react.modules.network.ReactNativeBridgeConfig;
+//import com.facebook.react.modules.network.ReactNativeConfig;
+
+
+
+
 
 class MainApplication : Application(), ReactApplication {
 
@@ -21,7 +30,9 @@ class MainApplication : Application(), ReactApplication {
             PackageList(this).packages.apply {
               // Packages that cannot be autolinked yet can be added manually here, for example:
               // add(MyReactNativePackage())
-              
+             // packages.add(new RNFetchBlobPackage());
+           //   return packages;
+             
             }
 
         override fun getJSMainModuleName(): String = "index"

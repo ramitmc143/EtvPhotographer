@@ -70,10 +70,11 @@ const LoginScreen = () => {
       // setUserLoginData(response)
       const jsonData = await response.json();
       setUserLoginData(jsonData);
+      console.log('jsonData===LoginScreen=======',jsonData)
       await AsyncStorage.setItem('userLoginData', JSON.stringify(jsonData));
       if (jsonData.data.name === username) {
         // navigation.navigate('punchScreen');
-        navigation.navigate('dashboard', {userLoginData: userLoginData});
+        navigation.navigate('dashboard', {userLoginData: jsonData});
         Alert.alert('loggedIn successfully');
         await handlePostApi();
       } else {

@@ -10,7 +10,8 @@ import FilteredData from '../filteredData/FilteredData';
 import GetCurrentLocation from '../getCurrentLocation/GetCurrentLocation';
 import PunchScreen from '../punchScreen/PunchScreen';
 import CameraComponent from '../camera/CameraComponent';
-
+import TestCamera from '../testCamera/TestCamera';
+import DisplayImages from '../testCamera/DisplayImages';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,8 +25,10 @@ const RouteApp = () => {
       <Stack.Screen name="todayWork" component={TodayWork} />
       <Stack.Screen name="dashboard" component={Dashboard} />
       {/* <Stack.Screen name="filteredData" component={FilteredData} /> */}
-      <Stack.Screen name="punchScreen"  component={PunchScreen} />
-      <Stack.Screen name='camera' component={CameraComponent} />
+      <Stack.Screen name="punchScreen" component={PunchScreen} />
+      <Stack.Screen name="camera" component={CameraComponent} />
+      <Stack.Screen name="testCamera" component={TestCamera} />
+      <Stack.Screen name="DisplayImages" component={DisplayImages} />
     </Stack.Navigator>
   );
 };

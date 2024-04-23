@@ -103,6 +103,11 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
+         staging {
+        initWith release
+        applicationIdSuffix '.staging'
+        matchingFallbacks = ['release']
+    }
     }
 }
 
@@ -110,7 +115,12 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:flipper-integration")
-    implementation project(':react-native-vector-icons')   
+    implementation project(':react-native-vector-icons') 
+     implementation project(':react-native-fs')  
+     implementation 'com.facebook.fresco:fresco:2.0.0'
+
+    
+       
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

@@ -10,11 +10,15 @@ import {
   Modal,
   Button,
   Alert,
-  FlatList
+  FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import {Calendar} from 'react-native-calendars';
-import {useNavigation, useFocusEffect ,useRoute } from '@react-navigation/native';
+import {
+  useNavigation,
+  useFocusEffect,
+  useRoute,
+} from '@react-navigation/native';
 import Iconsss from 'react-native-vector-icons/AntDesign';
 import handleEmployeeApi from '../handleEmployeeApi/handleEmployeeApi';
 import handlePunchApi from '../handlePunchApi/handlePunchApi';
@@ -22,6 +26,7 @@ import Iconssss from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import punchData from '../punchData/punchData';
 import deviceDetails from '../deviceDetails/DeviceDetails';
+import DisplayImages from '../testCamera/DisplayImages';
 
 const Dashboard = () => {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -34,30 +39,30 @@ const Dashboard = () => {
   const [startTime, setStartTime] = useState(null);
   const [duration, setDuration] = useState(0);
   const [employeeData, setEmployeeData] = useState([]);
-  const [lastWeekData, setLastWeekData] = useState(false);
-  const [thirtyDaysDat, setThirtyDaysDat] = useState(false);
   const [thisWeekData, setThisWeekData] = useState(true);
+  const [lastWeekData, setLastWeekData] = useState(false);
+  const [thirtyDaysData, setThirtyDaysData] = useState(false);
   const [showMenuDropDown, setShowMenuDropDown] = useState(false);
   const [userLoginResponse, setUserLoginResponse] = useState({});
   const [showLoading, setShowLoading] = useState(false);
+  const [storedImages, setStoredImages] = useState([]);
 
-  const route  = useRoute();
+  console.log('storedImages---', storedImages);
+
+  const route = useRoute();
 
   const {userLoginData} = route.params;
 
-  console.log('userLoginData=========',userLoginData)
+  console.log('userLoginData=========', userLoginData);
 
- 
-// const data = punchData();
-// console.log('dataaaaaaaaaaaa', data)
+  // const data = punchData();
+  // console.log('dataaaaaaaaaaaa', data)
   const navigation = useNavigation();
 
-
-
   useFocusEffect(
-    
     React.useCallback(() => {
       fetchData();
+      fetchStoredImages();
       // Specify a cleanup function for when the screen loses focus
       let interValId;
       if (interValId) {
@@ -76,11 +81,7 @@ const Dashboard = () => {
         clearInterval(interValId);
       };
     }, []),
-   
   );
-
-
-
 
   const getDisplayDate = dateString => {
     const currentDate = new Date();
@@ -110,10 +111,9 @@ const Dashboard = () => {
       return dateString;
     }
   };
-  
 
   const fetchData = async () => {
-    const employeeResponse = await handleEmployeeApi();
+    const employeeResponse = await handleEmployeeApi(userLoginData.data.name);
     setEmployeeData(employeeResponse.data);
     const userLoginAsyncData = await AsyncStorage.getItem('userLoginData');
     const parsedUserLoginDataAsyncData = JSON.parse(userLoginAsyncData);
@@ -135,8 +135,10 @@ const Dashboard = () => {
     try {
       const formattedDate = date.split('-').reverse().join('-');
       const response = await fetch(
-        `http://172.17.15.218/etvtracker/Api/punch_in_wise_data?punch_in=${formattedDate}`,
+        `http://172.17.15.218/etvtracker/Api/punch_in_wise_data?punch_in=${formattedDate}&user_name=${userLoginData.data.name}`,
       );
+      //http://172.17.15.218/etvtracker/Api/punch_in_wise_data?punch_in=2024-04-05&user_name=ambaji
+      //http://172.17.15.218/etvtracker/Api/punch_in_wise_data?punch_in=${formattedDate}
       const jsonData = await response.json();
       console.log('Filtered data:', jsonData);
 
@@ -162,14 +164,14 @@ const Dashboard = () => {
   const handlePunch = async () => {
     setIsPunchDisabled(true);
     const user_name = userLoginResponse.data.name;
-    const phone =  userLoginResponse.data.phone
+    const phone = userLoginResponse.data.phone;
     try {
       // Show loading icon
       setShowLoading(true);
 
       // Call handlePunchApi()
       // await handlePunchApi(userLoginResponse);
-      navigation.navigate('camera',{userLoginResponse:userLoginResponse})
+      navigation.navigate('testCamera', {userLoginResponse: userLoginResponse});
 
       fetchData();
 
@@ -190,6 +192,16 @@ const Dashboard = () => {
     }
   };
 
+  const fetchStoredImages = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const images = await AsyncStorage.multiGet(keys);
+      setStoredImages(images);
+    } catch (error) {
+      console.log('Error fetching stored images:', error);
+    }
+  };
+
   console.log('startTime :-', startTime);
   console.log('employeeData :-', employeeData);
   console.log('filteredData:-', filteredData);
@@ -206,8 +218,7 @@ const Dashboard = () => {
           style={{position: 'absolute', bottom: '8%', right: '9%', zIndex: 1}}>
           <TouchableOpacity
             onPress={() => {
-              handlePunch()
-              
+              handlePunch();
             }}
             disabled={isPunchDisabled}
             style={[
@@ -233,18 +244,21 @@ const Dashboard = () => {
           <View style={{marginTop: 7, marginLeft: 7}}>
             <Text>𝐏𝐡𝐨𝐭𝐨𝐠𝐫𝐚𝐩𝐡𝐞𝐫</Text>
           </View>
-          <TouchableOpacity
-            style={styles.menuIconContainer}
-            onPress={() => {
-              setShowMenuDropDown(!showMenuDropDown);
-            }}>
-            <Icon
-              name="menu"
-              size={35}
-              color="#B67352"
-              // color="white"
-            />
-          </TouchableOpacity>
+
+          <View style={{marginTop: '-10%'}}>
+            <TouchableOpacity
+              style={styles.menuIconContainer}
+              onPress={() => {
+                setShowMenuDropDown(!showMenuDropDown);
+              }}>
+              <Icon
+                name="menu"
+                size={35}
+                color="#B67352"
+                // color="white"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {showCalendar && (
@@ -273,6 +287,7 @@ const Dashboard = () => {
                 <View
                   style={{
                     //backgroundColor: 'pink',
+                    flexGrow: 1,
                     flexDirection: 'row',
                     justifyContent: 'space-around',
                     // flex: 1,
@@ -299,7 +314,7 @@ const Dashboard = () => {
                     ]}
                     onPress={() => {
                       setThisWeekData(true);
-                      setThirtyDaysDat(false);
+                      setThirtyDaysData(false);
                       setLastWeekData(false);
                     }}>
                     <Text
@@ -336,7 +351,7 @@ const Dashboard = () => {
                     ]}
                     onPress={() => {
                       setLastWeekData(true);
-                      setThirtyDaysDat(false);
+                      setThirtyDaysData(false);
                       setThisWeekData(false);
                     }}>
                     <Text
@@ -372,7 +387,7 @@ const Dashboard = () => {
                       // margin: 3,
                     }}
                     onPress={() => {
-                      setThirtyDaysDat(true);
+                      setThirtyDaysData(true);
                       setLastWeekData(false);
                       setThisWeekData(false);
                     }}>
@@ -386,7 +401,7 @@ const Dashboard = () => {
                           textAlign: 'center',
                           // fontStyle: 'italic',
                         },
-                        thirtyDaysDat
+                        thirtyDaysData
                           ? {color: 'green', fontWeight: 'bold'}
                           : {color: '#000', fontWeight: 'bold'},
                       ]}>
@@ -415,6 +430,13 @@ const Dashboard = () => {
             <FlatList
               data={employeeData}
               keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={{flexGrow: 1}}
+              horizontal={false}
+              scrollEnabled={true}
+              showsVerticalScrollIndicator={false}
+              onEndReached={this._handleLoadMore}
+              onEndReachedThreshold={0.5}
+              // scrollEnabled={bottomSheetIndex == 1 ? true : false}
               renderItem={({item, index}) => {
                 // Get the current date
                 const currentDate = new Date();
@@ -467,6 +489,23 @@ const Dashboard = () => {
                           <Text style={styles.dataCardValue}>
                             {item.address}
                           </Text>
+
+                          {/*  Displaying User Photo
+                          
+                          <View>
+                            <Image
+                              source={{uri: item.image_url}} // Use a valid image URI here
+                              style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: 100,
+                                borderWidth: 0.5,
+                                borderColor: '#000',
+                                alignSelf: 'center',
+                                //resizeMode: 'cover',
+                              }} // Set the width and height of the image
+                            />
+                          </View> */}
                         </View>
                       </View>
                     );
@@ -493,7 +532,7 @@ const Dashboard = () => {
                       </View>
                     );
                   }
-                } else if (thirtyDaysDat) {
+                } else if (thirtyDaysData) {
                   // Check if the punch_in date is within the last 30 days
                   if (
                     punchInDate >= last30DaysStartDate &&
@@ -733,6 +772,7 @@ const styles = StyleSheet.create({
     color: '#eb5e34',
   },
   dataCardItem: {
+    flex: 1,
     marginBottom: 15,
     margin: 15,
     marginTop: 15,
