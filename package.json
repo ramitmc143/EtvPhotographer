@@ -19,6 +19,7 @@
     "@react-native-firebase/storage": "^19.2.2",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
+    "base64-js": "^1.5.1",
     "deprecated-react-native-prop-types": "^5.0.0",
     "prop-types": "^15.8.1",
     "react": ">=16.8.0",

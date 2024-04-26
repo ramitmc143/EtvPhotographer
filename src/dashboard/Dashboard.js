@@ -27,6 +27,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import punchData from '../punchData/punchData';
 import deviceDetails from '../deviceDetails/DeviceDetails';
 import DisplayImages from '../testCamera/DisplayImages';
+import {writeFile} from 'react-native-fs';
 
 const Dashboard = () => {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -45,9 +46,7 @@ const Dashboard = () => {
   const [showMenuDropDown, setShowMenuDropDown] = useState(false);
   const [userLoginResponse, setUserLoginResponse] = useState({});
   const [showLoading, setShowLoading] = useState(false);
-  const [storedImages, setStoredImages] = useState([]);
 
-  console.log('storedImages---', storedImages);
 
   const route = useRoute();
 
@@ -62,7 +61,6 @@ const Dashboard = () => {
   useFocusEffect(
     React.useCallback(() => {
       fetchData();
-      fetchStoredImages();
       // Specify a cleanup function for when the screen loses focus
       let interValId;
       if (interValId) {
@@ -80,7 +78,7 @@ const Dashboard = () => {
         // Cleanup logic here
         clearInterval(interValId);
       };
-    }, []),
+    }, [employeeData]),
   );
 
   const getDisplayDate = dateString => {
@@ -192,15 +190,7 @@ const Dashboard = () => {
     }
   };
 
-  const fetchStoredImages = async () => {
-    try {
-      const keys = await AsyncStorage.getAllKeys();
-      const images = await AsyncStorage.multiGet(keys);
-      setStoredImages(images);
-    } catch (error) {
-      console.log('Error fetching stored images:', error);
-    }
-  };
+ 
 
   console.log('startTime :-', startTime);
   console.log('employeeData :-', employeeData);
@@ -438,6 +428,7 @@ const Dashboard = () => {
               onEndReachedThreshold={0.5}
               // scrollEnabled={bottomSheetIndex == 1 ? true : false}
               renderItem={({item, index}) => {
+                const imageUrl = item.image_url;
                 // Get the current date
                 const currentDate = new Date();
                 const currentWeekStart = new Date(
@@ -490,11 +481,11 @@ const Dashboard = () => {
                             {item.address}
                           </Text>
 
-                          {/*  Displaying User Photo
-                          
+                          {/* Displaying User Photo */}
+
                           <View>
                             <Image
-                              source={{uri: item.image_url}} // Use a valid image URI here
+                              source={{uri: imageUrl}} // Use a valid image URI here
                               style={{
                                 width: 100,
                                 height: 100,
@@ -505,7 +496,7 @@ const Dashboard = () => {
                                 //resizeMode: 'cover',
                               }} // Set the width and height of the image
                             />
-                          </View> */}
+                          </View>
                         </View>
                       </View>
                     );
@@ -528,6 +519,23 @@ const Dashboard = () => {
                           <Text style={styles.dataCardValue}>
                             {item.address}
                           </Text>
+
+                          {/* Displaying User Photo */}
+
+                          <View>
+                            <Image
+                              source={{uri: imageUrl}} // Use a valid image URI here
+                              style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: 100,
+                                borderWidth: 0.5,
+                                borderColor: '#000',
+                                alignSelf: 'center',
+                                //resizeMode: 'cover',
+                              }} // Set the width and height of the image
+                            />
+                          </View>
                         </View>
                       </View>
                     );
@@ -547,6 +555,23 @@ const Dashboard = () => {
                           <Text style={styles.dataCardValue}>
                             {item.address}
                           </Text>
+
+                          {/* Displaying User Photo */}
+
+                          <View>
+                            <Image
+                              source={{uri: imageUrl}} // Use a valid image URI here
+                              style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: 100,
+                                borderWidth: 0.5,
+                                borderColor: '#000',
+                                alignSelf: 'center',
+                                //resizeMode: 'cover',
+                              }} // Set the width and height of the image
+                            />
+                          </View>
                         </View>
                       </View>
                     );

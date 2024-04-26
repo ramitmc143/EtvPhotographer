@@ -70,7 +70,7 @@ const TestCamera = ({route}) => {
   const takePicture = async () => {
     if (cameraRef.current) {
       try {
-        const options = {quality: 0.5, base64: true, width: 300, height: 300}; // Set the desired width
+        const options = {quality: 0.5, base64: true, width: 150, height: 150}; // Set the desired width
         const data = await cameraRef.current.takePictureAsync(options);
 
         setCapturedImage(data.uri)
@@ -101,7 +101,7 @@ const TestCamera = ({route}) => {
       } catch (error) {
         setShowLoading(false);
         console.error('Error in takePicture:', error);
-        Alert.alert('Error in takePicture:', error.message);
+        // Alert.alert('Error in takePicture:', error.message);
       }
     }
   };
